@@ -37,10 +37,10 @@ namespace WindowsFormsApp1
 
                 activate(filename);
             }
-            else
-            {
-                MessageBox.Show("dick");
-            }
+            //else
+            //{
+            //    MessageBox.Show("dick");
+            //}
         }
         private void activate(string filename)
         {

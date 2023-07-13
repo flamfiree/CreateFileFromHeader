@@ -13,8 +13,7 @@ namespace WindowsFormsApp1
 {
     class FileService
     {
-        //private static int tableCounter = 1; // Счетчик таблиц
-
+        
         public static void DocxCreate(string path, List<Structure> ChosenStructures)
         {
             int tableCounter = 1;
@@ -48,12 +47,18 @@ namespace WindowsFormsApp1
                     document.InsertTable(table);
                     document.InsertParagraph();
                 }
-
+                //return document;
                 document.Save();
             }
         }
-        public static void PdfCreate(string path, List<Structure> ChosenStructures)
+
+        
+
+            public static void PdfCreate(string path, List<Structure> ChosenStructures)
         {
+            BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);
+
             iTextSharp.text.Document document = new iTextSharp.text.Document();
             int tableCounter = 1;
             using (FileStream fileStream = new FileStream(path, FileMode.Create))
@@ -63,31 +68,25 @@ namespace WindowsFormsApp1
 
                 foreach (Structure structure in ChosenStructures)
                 {
-                    //document.Add(
-                    //    new iTextSharp.text.Paragraph(
-                    //        $"Таблица {tableCounter} - {structure.Name}", 
-                    //        new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD)
-                    //        )
-                    //    );
-
                     document.Add(
                         new iTextSharp.text.Paragraph($"Таблица {tableCounter} - {structure.Name}",
-                        new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.HELVETICA, 16, iTextSharp.text.Font.BOLD)
+                        new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.TIMES_ROMAN, 16, iTextSharp.text.Font.BOLD)
+                       
                         )
                         );
+                    document.Add(new iTextSharp.text.Paragraph("\n"));
 
                     tableCounter++;
 
                     PdfPTable table = new PdfPTable(4);
                     table.WidthPercentage = 100;
                     table.HorizontalAlignment = Element.ALIGN_CENTER;
-                    table.SetWidths(new float[] { 2f, 1f, 3f, 2f });
+                    table.SetWidths(new float[] { 10f, 2f, 4f, 2f });
 
-                    // Заполнение заголовков таблицы
-                    table.AddCell(GetPdfCell("Название элемента структуры"));
-                    table.AddCell(GetPdfCell("Код параметра"));
-                    table.AddCell(GetPdfCell("Наименование параметра (сигнала)"));
-                    table.AddCell(GetPdfCell("Примечание"));
+                    table.AddCell("Name");
+                    table.AddCell("DataType");
+                    table.AddCell("Description");
+                    table.AddCell("Note");
 
                     foreach (Line line in structure.Lines)
                     {
